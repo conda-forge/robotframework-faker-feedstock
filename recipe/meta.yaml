@@ -6,37 +6,40 @@ package:
 
 source:
   - folder: dist
-    url: https://pypi.io/packages/source/r/robotframework-faker/robotframework-faker-{{ version }}.tar.gz
+    url: https://pypi.org/packages/source/r/robotframework-faker/robotframework-faker-{{ version }}.tar.gz
     sha256: 0ba9cc2c353a9a2dd3924869a583f217e6738bff0546a07a3e581186af166531
   - folder: src
     url: https://github.com/guykisel/robotframework-faker/archive/refs/tags/v{{ version }}.tar.gz
     sha256: 0cb18714cb5ae05c658951f794d337c701de5d69d951e2bb04db1f8ec3db1f41
 
 build:
+  number: 1
   noarch: python
-  script: cd dist && {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  number: 0
+  script:
+    - cd dist 
+    - {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation --disable-pip-version-check
 
 requirements:
   host:
     - pip
-    - python >=3.5
+    - python {{ python_min }}
   run:
     - faker
-    - python >=3.5
+    - python >={{ python_min }}
     - robotframework
     - wrapt
 
 test:
   source_files:
      - src/tests
+  requires:
+    - pip
+    - python {{ python_min }}
   imports:
     - FakerLibrary
   commands:
     - pip check
     - robot src/tests
-  requires:
-    - pip
 
 about:
   home: https://github.com/guykisel/robotframework-faker
