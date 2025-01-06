@@ -13,9 +13,11 @@ source:
     sha256: 0cb18714cb5ae05c658951f794d337c701de5d69d951e2bb04db1f8ec3db1f41
 
 build:
-  noarch: python
-  script: cd dist && {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 1
+  noarch: python
+  script:
+    - cd dist 
+    - {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation --disable-pip-version-check
 
 requirements:
   host:
@@ -30,14 +32,14 @@ requirements:
 test:
   source_files:
      - src/tests
+  requires:
+    - pip
+    - python {{ python_min }}
   imports:
     - FakerLibrary
   commands:
     - pip check
     - robot src/tests
-  requires:
-    - pip
-    - python {{ python_min }}
 
 about:
   home: https://github.com/guykisel/robotframework-faker
