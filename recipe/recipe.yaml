@@ -45,9 +45,11 @@ tests:
         - src/tests/
     requirements:
       run:
+        - coverage
         - python ${{ python_min }}.*
     script:
-      - robot src/tests
+      - coverage run --source=FakerLibrary --branch -m robot src/tests
+      - coverage report --show-missing --skip-covered --fail-under=96
 
 about:
   summary: Robot Framework wrapper for faker, a fake test data generator
